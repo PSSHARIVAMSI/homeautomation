@@ -4,9 +4,9 @@
 #define CLIENT_ID "homeauto"
 #define port 1883
 
-const char *ssid ="Ahil choyen";
-const char *pswd ="8008913599";
-const char *mqtt_Server="3.84.236.93";
+const char *ssid ="";//YOUR WIFI NAME
+const char *pswd ="";//YOUR WIFI PASSWORD
+const char *mqtt_Server="";//YOUR PRIVATE SERVER IP
 
 WiFiClient espclient;
 PubSubClient client(espclient);
