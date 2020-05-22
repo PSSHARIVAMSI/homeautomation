@@ -6,9 +6,9 @@ char data[100];
 #define CLIENT_ID "homeauto"
 #define port 1883
 
-const char *ssid ="vamsi";
-const char *pswd ="PSSHV@3522";
-const char *mqtt_Server="3.84.236.93";
+const char *ssid ="";//your ssid
+const char *pswd ="";//your password
+const char *mqtt_Server="";//your broker
 
 WiFiClient espclient;
 PubSubClient client(espclient);
