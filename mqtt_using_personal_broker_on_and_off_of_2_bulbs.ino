@@ -1,3 +1,4 @@
+#include<>ArduinoJson.h>
 #include<ESP8266WiFi.h>
 #include<PubSubClient.h>
 
@@ -88,8 +89,11 @@ void callback(char* topic, byte* payload, unsigned int length)
     bulb2_st="off";
     } 
    }
-   String  msg="{\"bulb1\":\""+bulb1_st+"\",\"bulb2\";\""+bulb2_st+"\"}";
-   msg.toCharArray(data,100);
+  values.add(bulb1_st);
+  values.add(bulb2_st);
+  serializeJson(Doc, data); 
+  //String  msg="{\"bulb1\":\""+bulb1_st+"\",\"bulb2\";\""+bulb2_st+"\"}";
+   //msg.toCharArray(data,100);
    client.publish("status",data);
    Serial.println(data);
   
