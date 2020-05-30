@@ -1,0 +1,54 @@
+
+import paho.mqtt.client as mqtt
+import mysql.connector
+from mysql.connector import Error
+from datetime import datetime, timezone
+from dateutil import tz
+import json
+
+
+
+def on_connect(client,userdata,flags,rc):
+    print("connected with result code"+str(rc))
+    client.subscribe("status")
+
+def on_message(client,userdata,msg):
+    print("topic: "+msg.topic+" data: "+str(msg.payload))
+    data=str(msg.payload.decode("utf-8","ignore"))
+    print(data)
+    print(type(data))
+    data_in=json.loads(data)
+    print(data_in)
+    print(data_in["bulb1"],data_in["bulb2"])
+    add_data(data_in["bulb1"],data_in["bulb2"])
+
+def add_data(b1,b2):
+    print(b1,b2)
+    from_zone = tz.gettz('UTC')
+    to_zone = tz.gettz('Asia/kolkata')
+    utc = datetime.now().replace(tzinfo=from_zone)
+    dt = utc.astimezone(to_zone)
+    dt=str(dt)
+    try:
+        connection = mysql.connector.connect(host='localhost',database='Home automation',user='root',password='Psshv@3522')
+        cursor=connection.cursor()
+        query="INSERT INTO ha_status(bulb1,bulb2,dt)VALUES('"+b1+"','"+b2+"','"+dt+"')"
+        cursor.execute(query)
+        connection.commit()
+        print("Record inserted successfully into ha_status table")
+    except  mysql.connector.Error as Error:
+        print("Failed to insert into mysql table{}".format(error))
+    finally:
+        if(connection.is_connected()):
+           cursor.close()
+           connection.close()
+           print("MySql connection is closed")
+client = mqtt.Client()
+client.on_connect=on_connect
+client.on_message = on_message
+
+
+client.connect("3.84.236.93",1883,60)
+
+
+client.loop_forever()
